@@ -84,3 +84,18 @@ lsof -i :5005
 All your data is saved locally on your machine:
 *   Data entries: [patrimoine.csv](file:///Users/ValQuiTravaille/Projects/Tests/MoneyTracking/patrimoine.csv)
 *   Objective configuration: `config.json`
+
+---
+
+## ⚠️ Troubleshooting macOS Gatekeeper Warning
+
+Since the application is not signed with a paid Apple Developer certificate, macOS will block it on first open with a warning like *"MoneyTracker is damaged"* or *"developer cannot be verified"*. This is a standard security precaution.
+
+To open the app:
+1.  **Right-click** (or Control-click) `MoneyTracker.app` in Finder and select **Open**.
+2.  If it still doesn't open, open your terminal and run the following command to remove the quarantine flag:
+    ```bash
+    xattr -cr /path/to/MoneyTracker.app
+    ```
+    *(e.g., `xattr -cr ~/Downloads/MoneyTracker.app` if you downloaded it to your Downloads folder).*
+3.  Double-click `MoneyTracker.app` to launch normally.

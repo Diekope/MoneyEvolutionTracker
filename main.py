@@ -15,12 +15,22 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import rumps
 
-# File paths
-DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "patrimoine.csv")
-CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
+# Persistent data directory in user home folder
+DATA_DIR = os.path.join(os.path.expanduser("~"), ".moneytracking")
+os.makedirs(DATA_DIR, exist_ok=True)
+DATA_FILE = os.path.join(DATA_DIR, "patrimoine.csv")
+CONFIG_FILE = os.path.join(DATA_DIR, "config.json")
 
-# Initialize Flask App
-app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates"))
+def get_resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller."""
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
+
+# Initialize Flask App using bundled templates folder
+app = Flask(__name__, template_folder=get_resource_path("templates"))
 
 # Quiet Flask logging
 log = logging.getLogger('werkzeug')

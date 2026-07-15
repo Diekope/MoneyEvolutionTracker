@@ -16,5 +16,10 @@ patrimoine = "main:main"
 patrimoine-cli = "main:run_cli"
 patrimoine-gui = "main:run_web_gui"
 
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.21.0",
+]
+
 
 

@@ -65,6 +65,9 @@ launchctl unload ~/Library/LaunchAgents/fr.valquitravaille.moneytracking.plist
 ```
 *This will immediately kill the background server, remove the menu bar icon, and deregister the startup service.*
 
+> [!NOTE]
+> Clicking **Quit** in the macOS menu bar icon stops the application and the local server immediately. It will **not** restart automatically during your current session. It will only start again when you reboot/restart your Mac.
+
 ### 3. Check status
 To check if the background server is currently running:
 ```bash

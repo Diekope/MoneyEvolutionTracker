@@ -1,6 +1,9 @@
 # 💼 MoneyTracker — Summer 2026
 
 A minimalist and elegant macOS application to track the evolution of your net worth over the summer.
+
+[![Download macOS App](https://img.shields.io/badge/Download-macOS%20App-00ADB5?style=for-the-badge&logo=apple)](https://github.com/Diekope/MoneyEvolutionTracker/releases/download/v1.0.0/MoneyTracker-macOS.zip)
+
 The application offers three interfaces:
 1. **Web Dashboard (Recommended GUI)**: A modern and responsive web interface with dynamic charts and an easy-to-use calendar date picker.
 2. **macOS Status Bar Widget**: An icon and context menu integrated directly into your macOS menu bar (`rumps`), showing your current balance and net growth.

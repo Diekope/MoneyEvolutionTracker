@@ -18,8 +18,12 @@ patrimoine-gui = "main:run_web_gui"
 
 [dependency-groups]
 dev = [
+    "bandit>=1.9.4",
+    "mypy>=2.3.0",
     "pyinstaller>=6.21.0",
+    "pytest>=9.1.1",
+    "ruff>=0.15.21",
 ]
 
-
-
+[tool.pytest.ini_options]
+pythonpath = ["."]

@@ -148,8 +148,7 @@ def generate_chart():
                 color='#AAAAAA', fontsize=12, ha='center', va='center')
         ax.set_title("Évolution de votre Patrimoine", fontsize=14, fontweight='bold', color='#EEEEEE', pad=15)
         plt.tight_layout()
-        temp_dir = tempfile.gettempdir()
-        chart_path = os.path.join(temp_dir, "patrimoine_evolution.png")
+        chart_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "patrimoine_evolution.png")
         plt.savefig(chart_path, facecolor=fig.get_facecolor(), edgecolor='none')
         plt.close()
         subprocess.run(["open", chart_path])
@@ -219,8 +218,7 @@ def generate_chart():
         
     plt.tight_layout()
     
-    temp_dir = tempfile.gettempdir()
-    chart_path = os.path.join(temp_dir, "patrimoine_evolution.png")
+    chart_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "patrimoine_evolution.png")
     plt.savefig(chart_path, facecolor=fig.get_facecolor(), edgecolor='none')
     plt.close()
     

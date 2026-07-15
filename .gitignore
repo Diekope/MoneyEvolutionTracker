@@ -16,5 +16,7 @@ patrimoine.csv
 # Logs & temp files
 *.log
 *.err
+*.png
 .DS_Store
+
 

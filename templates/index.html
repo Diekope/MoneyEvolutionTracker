@@ -596,10 +596,11 @@
                     populateForm(entry.date, entry.valeur, entry.note);
                 };
 
+                const safeNote = entry.note ? escapeHTML(entry.note) : '--';
                 tr.innerHTML = `
                     <td>${formatDateStr(entry.date)}</td>
                     <td style="font-weight: 600;">${formatCurrency(entry.valeur)}</td>
-                    <td style="color: var(--text-muted);">${entry.note || '--'}</td>
+                    <td style="color: var(--text-muted);">${safeNote}</td>
                     <td class="action-cell">
                         <button class="btn-icon-del" onclick="deleteRow('${entry.date}')" title="Supprimer">🗑️</button>
                     </td>
@@ -610,6 +611,15 @@
 
         // Draw Chart
         drawChart(entries, config);
+    }
+
+    function escapeHTML(str) {
+        if (!str) return '';
+        return str.replace(/&/g, "&amp;")
+                  .replace(/</g, "&lt;")
+                  .replace(/>/g, "&gt;")
+                  .replace(/"/g, "&quot;")
+                  .replace(/'/g, "&#039;");
     }
 
     function formatCurrency(val) {

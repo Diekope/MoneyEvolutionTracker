@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💼 Suivi de Patrimoine — Été 2026</title>
+    <title>💼 Suivi de Patrimoine</title>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -423,7 +423,7 @@
     <div class="setup-card">
         <div class="setup-title">
             <h2>Configuration Initiale</h2>
-            <p>Définissez vos objectifs d'épargne pour cet été.</p>
+            <p>Définissez vos objectifs d'épargne.</p>
         </div>
         <div class="form-group">
             <label for="setupGoal">Objectif Monétaire (€)</label>
@@ -443,7 +443,7 @@
     <!-- Header -->
     <header>
         <div class="header-title-section">
-            <h1>💼 Suivi de Patrimoine — Été 2026</h1>
+            <h1>💼 Suivi de Patrimoine</h1>
             <p>Gestionnaire d'évolution de votre patrimoine</p>
         </div>
         <div class="header-actions">
@@ -563,7 +563,7 @@
         document.getElementById('statLatest').innerText = formatCurrency(stats.latest);
         const sign = stats.diff >= 0 ? '+' : '';
         const trendEl = document.getElementById('statTrend');
-        trendEl.innerText = `${sign}${formatCurrency(stats.diff)} (${sign}${stats.pct.toFixed(2)}%) cet été`;
+        trendEl.innerText = `${sign}${formatCurrency(stats.diff)} (${sign}${stats.pct.toFixed(2)}%) depuis le début`;
         trendEl.className = `stat-desc ${stats.diff >= 0 ? 'trend-up' : 'trend-down'}`;
 
         // Stat Goal

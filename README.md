@@ -1,6 +1,6 @@
-# 💼 MoneyTracker — Summer 2026
+# 💼 MoneyTracker
 
-A minimalist and elegant macOS application to track the evolution of your net worth over the summer.
+A minimalist and elegant macOS application to track the evolution of your net worth against a financial goal.
 
 [![Download macOS App](https://img.shields.io/badge/Download-macOS%20App-00ADB5?style=for-the-badge&logo=apple)](https://github.com/Diekope/MoneyEvolutionTracker/releases/download/v1.0.0/MoneyTracker-macOS.zip)
 
@@ -99,3 +99,24 @@ To open the app:
     ```
     *(e.g., `xattr -cr ~/Downloads/MoneyTracker.app` if you downloaded it to your Downloads folder).*
 3.  Double-click `MoneyTracker.app` to launch normally.
+
+---
+
+## 🚀 Future Improvements (Roadmap)
+
+Here are some suggested ideas to improve this application:
+
+### 1. 📈 Analytics & Projections
+*   **Saving Pace Calculator**: Display a dynamic alert calculating how much you need to save per day or per week to reach your goal by the target date (e.g., *"45 days remaining. You need to save an average of 12.50 € / day to reach your goal"*).
+*   **Trend Projection Line**: Draw a dotted forecast line on the Chart.js graph based on your average savings rate over the last few weeks to simulate whether you will hit or miss the target.
+
+### 2. 🗂️ Asset Allocation & Categories
+*   **Asset Breakdown**: Add a "Category" field to entries (e.g., *Cash, Stocks, Crypto, Real Estate*).
+*   **Asset Allocation Pie Chart**: Add a doughnut/pie chart to the web dashboard to see where your money is distributed.
+
+### 3. 🔔 macOS Native Reminders
+*   **Weekly Reminder Notifications**: Configure the background daemon to send a native macOS notification (e.g., every Sunday at 6 PM) to remind you to log your net worth: *"💼 Time to log your net worth for the week!"*.
+
+### 4. 🔒 Privacy & Encryption
+*   **Access PIN Code**: Add a simple 4-digit PIN code screen to lock the web interface and keep your financial data private.
+

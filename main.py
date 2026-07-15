@@ -211,7 +211,7 @@ def generate_chart():
             
     latest, diff, pct = get_stats()
     sign = "+" if diff >= 0 else ""
-    title_text = f"Évolution de votre Patrimoine — Été 2026\n"
+    title_text = f"Évolution de votre Patrimoine\n"
     
     if config:
         progression = (latest / config["objectif"] * 100) if config["objectif"] != 0 else 0
@@ -368,7 +368,7 @@ def run_cli():
         config = load_config()
         
     print("\n" + "="*50)
-    print(" 💼 SUIVI DE PATRIMOINE - ÉTÉ 2026 (Mode Terminal)")
+    print(" 💼 SUIVI DE PATRIMOINE (Mode Terminal)")
     print("="*50)
     
     while True:

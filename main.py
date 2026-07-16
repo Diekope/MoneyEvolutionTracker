@@ -10,6 +10,8 @@ import threading
 import time
 import logging
 from flask import Flask, render_template, request, jsonify
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import rumps
@@ -91,16 +93,24 @@ def load_data():
     return data
 
 
-def save_entry(date_str, valeur, note=""):
-    """Saves a single entry to the CSV file, replacing if date already exists."""
+def save_entry(date_str, valeur, note="", overwrite=False):
+    """Saves a single entry to the CSV file, accumulating or replacing if date already exists."""
     data = load_data()
     target_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
 
     updated = False
     for entry in data:
         if entry["date"] == target_date:
-            entry["valeur"] = float(valeur)
-            entry["note"] = note
+            if overwrite:
+                entry["valeur"] = float(valeur)
+                entry["note"] = note
+            else:
+                entry["valeur"] += float(valeur)
+                if note:
+                    if entry["note"]:
+                        entry["note"] = f"{entry['note']}, {note}"
+                    else:
+                        entry["note"] = note
             updated = True
             break
 
@@ -186,7 +196,10 @@ def generate_chart():
         )
         plt.savefig(chart_path, facecolor=fig.get_facecolor(), edgecolor="none")
         plt.close()
-        subprocess.run(["open", chart_path])
+        try:
+            subprocess.run(["open", chart_path])
+        except Exception:
+            pass
         return chart_path
 
     dates = [entry["date"] for entry in data]
@@ -221,7 +234,6 @@ def generate_chart():
 
     if config:
         goal = config["objectif"]
-        end_date = datetime.datetime.strptime(config["date_fin"], "%Y-%m-%d").date()
         ax.axhline(
             y=goal,
             color="#FF5722",
@@ -230,20 +242,10 @@ def generate_chart():
             alpha=0.8,
             label=f"Objectif ({goal:,.0f} €)",
         )
-        all_dates = dates + [end_date]
-        ax.set_xlim(
-            min(all_dates) - datetime.timedelta(days=2),
-            max(all_dates) + datetime.timedelta(days=2),
-        )
-        ax.plot(
-            end_date,
-            goal,
-            marker="*",
-            markersize=12,
-            color="#FF5722",
-            markeredgecolor="#EEEEEE",
-            label="Date Cible",
-        )
+
+    # Set x limits to recorded dates to avoid squishing data when end_date is far in the future
+    margin = datetime.timedelta(days=2) if len(dates) > 1 else datetime.timedelta(days=1)
+    ax.set_xlim(min(dates) - margin, max(dates) + margin)
 
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%d %b"))
     ax.xaxis.set_major_locator(
@@ -277,7 +279,6 @@ def generate_chart():
 
     latest, diff, pct = get_stats()
     sign = "+" if diff >= 0 else ""
-    title_text = "Évolution de votre Patrimoine\n"
 
     if config:
         progression = (
@@ -289,8 +290,9 @@ def generate_chart():
             f"Actuel : {latest:,.2f} €  ({sign}{diff:,.2f} € | {sign}{pct:.2f}%)"
         )
 
-    ax.set_title(title_text, fontsize=14, fontweight="bold", color="#EEEEEE", pad=15)
-    fig.suptitle(stat_text, fontsize=10, color="#00ADB5", y=0.92)
+    # Put subtitle on ax title and main title on fig suptitle to prevent overlapping
+    ax.set_title(stat_text, fontsize=10, color="#00ADB5", pad=10)
+    fig.suptitle("Évolution de votre Patrimoine", fontsize=14, fontweight="bold", color="#EEEEEE")
     ax.legend(
         loc="upper left", framealpha=0.6, facecolor="#1e1e1e", edgecolor="#333333"
     )
@@ -298,7 +300,7 @@ def generate_chart():
     for spine in ax.spines.values():
         spine.set_color("#333333")
 
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, 0, 1, 0.93])
 
     chart_path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "patrimoine_evolution.png"
@@ -306,7 +308,10 @@ def generate_chart():
     plt.savefig(chart_path, facecolor=fig.get_facecolor(), edgecolor="none")
     plt.close()
 
-    subprocess.run(["open", chart_path])
+    try:
+        subprocess.run(["open", chart_path])
+    except Exception:
+        pass
     return chart_path
 
 
@@ -358,9 +363,10 @@ def create_or_update_entry():
         date_str = req_data["date"]
         valeur = float(req_data["valeur"])
         note = req_data.get("note", "").strip()
+        overwrite = req_data.get("overwrite", False)
         # Validate date
         datetime.datetime.strptime(date_str, "%Y-%m-%d")
-        save_entry(date_str, valeur, note)
+        save_entry(date_str, valeur, note, overwrite=overwrite)
         return jsonify({"status": "ok"})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
@@ -630,15 +636,15 @@ class PatrimoineApp(rumps.App):
 
         self.menu.clear()
         self.menu.add(
-            rumps.MenuItem(f"Patrimoine Actuel : {latest:,.2f} €", callback=None)
+            rumps.MenuItem(f"Patrimoine Actuel : {latest:,.2f} €", callback=self.on_open_gui)
         )
         self.menu.add(
             rumps.MenuItem(
                 f"Objectif : {config['objectif']:,.2f} € ({latest / config['objectif'] * 100:.1f}%)",
-                callback=None,
+                callback=self.on_open_gui,
             )
         )
-        self.menu.add(rumps.MenuItem(f"Cible : {config['date_fin']}", callback=None))
+        self.menu.add(rumps.MenuItem(f"Cible : {config['date_fin']}", callback=self.on_open_gui))
         self.menu.add(rumps.separator)
 
         self.menu.add(

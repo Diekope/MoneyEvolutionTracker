@@ -735,12 +735,15 @@
         });
     }
 
+    let isEditing = false;
+
     // Form logic
     function populateForm(date, value, note) {
         document.getElementById('entryDate').value = date;
         document.getElementById('entryValue').value = value;
         document.getElementById('entryNote').value = note;
         document.getElementById('formTitle').innerText = "Modifier l'entrée";
+        isEditing = true;
     }
 
     function resetForm() {
@@ -748,6 +751,7 @@
         document.getElementById('entryValue').value = '';
         document.getElementById('entryNote').value = '';
         document.getElementById('formTitle').innerText = "Saisir une entrée";
+        isEditing = false;
     }
 
     // Save Entry API
@@ -774,7 +778,7 @@
             const res = await fetch('/api/entries', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ date, valeur: value, note })
+                body: JSON.stringify({ date, valeur: value, note, overwrite: isEditing })
             });
 
             if (res.ok) {
